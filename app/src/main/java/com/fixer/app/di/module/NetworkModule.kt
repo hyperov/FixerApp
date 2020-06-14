@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
-    @Singleton
+//    @Singleton
     @Provides
     fun getRetrofitInstance(): ApiEndPoints {
         val interceptor = HttpLoggingInterceptor()
