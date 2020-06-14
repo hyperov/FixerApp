@@ -17,6 +17,8 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment() {
 
+    private lateinit var currenciesAdapter: CurrenciesAdapter
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainViewModel
@@ -31,13 +33,20 @@ class MainFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        setupAdapter()
         getCurrenciesList()
         subscribeToViewModel()
     }
 
+    private fun setupAdapter() {
+        currenciesAdapter =
+            CurrenciesAdapter(arrayListOf(), { currency: Pair<String, Double> -> })
+        rvCurrencies.adapter = currenciesAdapter
+    }
+
     private fun subscribeToViewModel() {
         viewModel.currenciesLiveData.observe(viewLifecycleOwner, Observer { list ->
-
+            currenciesAdapter.add(list)
         })
 
         viewModel.progressLiveData.observe(viewLifecycleOwner, Observer { isProgress ->

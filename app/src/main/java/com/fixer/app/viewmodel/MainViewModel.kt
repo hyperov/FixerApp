@@ -21,6 +21,7 @@ class MainViewModel(val repo: Repository) : ViewModel() {
             .map { res: CurrenciesResponse -> res.rates.toList() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { progressLiveData.value = false }
             .subscribe({ list -> currenciesLiveData.value = list },
                 { e -> errorLiveData.value = e.message })
         )
