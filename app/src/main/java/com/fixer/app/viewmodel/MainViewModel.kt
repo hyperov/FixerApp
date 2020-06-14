@@ -16,6 +16,8 @@ class MainViewModel(val repo: Repository) : ViewModel() {
     var errorLiveData = MutableLiveData<String>()
     var progressLiveData = MutableLiveData<Boolean>()
 
+    val selectedCurrency = MutableLiveData<Pair<String, Double>>()
+
     fun getCurrencies(accessKey: String) {
         compositeDisposable.add(repo.getCurrenciesList(accessKey)
             .map { res: CurrenciesResponse -> res.rates.toList() }

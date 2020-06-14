@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.fixer.app.R
+import com.fixer.app.extensions.roundToTwoDecimalNumbers
 import kotlinx.android.synthetic.main.item_currency.view.*
 
 class CurrenciesAdapter(
@@ -37,7 +38,7 @@ class CurrenciesAdapter(
 
             with(currency) {
                 tvCurrency.text = currency.first
-                tvRate.text = currency.second.toString()
+                tvRate.text = currency.second.roundToTwoDecimalNumbers().toString()
             }
 
             setOnClickListener {

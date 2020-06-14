@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.fixer.app.R
 import com.fixer.app.viewmodel.MainViewModel
 import com.fixer.app.viewmodel.ViewModelFactory
@@ -32,16 +35,30 @@ class MainFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        setupViewModel()
         setupAdapter()
         getCurrenciesList()
         subscribeToViewModel()
     }
 
+    private fun setupViewModel() {
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
+            .get(MainViewModel::class.java)
+    }
+
     private fun setupAdapter() {
         currenciesAdapter =
-            CurrenciesAdapter(arrayListOf(), { currency: Pair<String, Double> -> })
+            CurrenciesAdapter(arrayListOf()) { currency: Pair<String, Double> ->
+                viewModel.selectedCurrency.postValue(currency)
+                findNavController().navigate(R.id.detailFragment)
+            }
         rvCurrencies.adapter = currenciesAdapter
+        rvCurrencies.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                RecyclerView.VERTICAL
+            )
+        )
     }
 
     private fun subscribeToViewModel() {
